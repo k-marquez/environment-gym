@@ -2,37 +2,84 @@ import random, gym
 
 from gym import spaces
 
+random.seed(17)
 # Representación de una skill
 class Skill:
     def __init__(self, skill):
         self.skill = skill # Categoria
-        random.seed(17)
-        
 
     def execute(self, emotion): # Acción que ejecuta (Evalúa la probabilidad y retorna o no ganancia)
         # Sorpresa -> 0, Alegría -> 1, Asco -> 2, Tristeza -> 3, Ira -> 4, Miedo -> 5 
         if self.skill == "limites":
-            if (emotion == 5 or emotion == 4 or emotion == 3) and random.random() < 0.05:
+            if emotion == 5 and random.random() < 0.05:
                 return .1
+            elif emotion == 4 and random.random() < 0.09:
+                return .33
+            elif emotion == 3 and random.random() < 0.26:
+                return .42
+            elif emotion == 2 and random.random() < 0.19:
+                return .35
             elif emotion == 1 and random.random() < 0.35:
                 return .5
-            elif emotion == 2 and random.random() < 0.01:
-                return .35
             elif emotion == 0 and random.random() < 0.45:
                 return .15
             return .6
         elif self.skill == "derivadas":
             if emotion == 5 and random.random() < 0.1:
                 return .38
-            elif (emotion == 4 or emotion == 3) and random.random() < .03:
+            elif emotion == 4 and random.random() < .03:
                 return .26
-            elif emotion == 1 and random.random() < 0.7:
-                return .77
+            elif emotion == 3 and random.random() < 0.5:
+                return .312
             elif emotion == 2 and random.random() < 0.01:
                 return .41
+            elif emotion == 1 and random.random() < 0.7:
+                return .77
             elif emotion == 0 and random.random() < 0.65:
                 return .35
             return .4
+        elif self.skill == "inecuaciones":
+            if emotion == 5 and random.random() < 0.2:
+                return .25
+            elif emotion == 4 and random.random() < .09:
+                return .10
+            elif emotion == 3 and random.random() < 0.05:
+                return .74
+            elif emotion == 2 and random.random() < 0.23:
+                return .34
+            elif emotion == 1 and random.random() < 0.75:
+                return .83
+            elif emotion == 0 and random.random() < 0.45:
+                return .27
+            return .18
+        elif self.skill == "conicas":
+            if emotion == 5 and random.random() < 0.075:
+                return .33
+            elif emotion == 4 and random.random() < .1:
+                return .39
+            elif emotion == 3 and random.random() < 0.18:
+                return .46
+            elif emotion == 2 and random.random() < 0.05:
+                return .54
+            elif emotion == 1 and random.random() < 0.4:
+                return .66
+            elif emotion == 0 and random.random() < 0.85:
+                return .44
+            return .22
+        elif self.skill == "funciones":
+            if emotion == 5 and random.random() < 0.25:
+                return .40
+            elif emotion == 4 and random.random() < .045:
+                return .41
+            elif emotion == 3 and random.random() < .4:
+                return 0.6
+            elif emotion == 2 and random.random() < 0.2333:
+                return .75
+            elif emotion == 1 and random.random() < 0.5673:
+                return .90
+            elif emotion == 0 and random.random() < 0.7875:
+                return .5
+            return .1
 
 class Student(gym.Env):
     def __init__(self):
@@ -40,7 +87,7 @@ class Student(gym.Env):
         # Recomendable usarlos como tuplas o listas, porque gym retorna las acciones como enteros
         # Ver línea 62
         #---------------------------------------
-        self.skills = (Skill("limites"),Skill("derivadas"))
+        self.skills = (Skill("limites"),Skill("derivadas"),Skill("funciones"),Skill("inecuaciones"),Skill("conicas"))
         #---------------------------------------
         # Obligatorio de gym (Define el espacio de estados el ambiente)
         # Equivalente a las emociones (Modelo de Paul Ekman: 6 emociones)
@@ -83,7 +130,7 @@ class Student(gym.Env):
     def step(self, action):
         self.action = action
         self.reward = self.skills[action].execute(self.current_state)
-        if self.reward <= 0.05:
+        if self.reward <= 0.14:
             self.current_state = 2
         elif self.reward <= 0.2:
             self.current_state = 4

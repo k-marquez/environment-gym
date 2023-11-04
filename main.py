@@ -9,7 +9,7 @@ register_env(id_env, entry_point)
 
 def train(env, agent, episodes):
     for _ in range(episodes):
-        observation, _ = env.reset()
+        observation, _ = env.reset(seed=17)
         terminated, truncated = False, False
         #while not (terminated or truncated):
         action = agent.get_action(observation, "random")
