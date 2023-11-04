@@ -64,4 +64,4 @@ class QLearning:
                 )
             )
         elif mode == "values":
-            print("Q-Table: {}".format(self.q_table))
+            print("Q-Table: \n{}".format(self.q_table))
